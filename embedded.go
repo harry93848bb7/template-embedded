@@ -13,11 +13,13 @@ import (
 
 func main() {
 	var (
-		input  string
-		output string
+		input       string
+		output      string
+		packageName string
 	)
-	flag.StringVar(&input, "in", "", ``)
-	flag.StringVar(&output, "out", "", ``)
+	flag.StringVar(&input, "in", "", `The template file or directory containing all templates wishing to embed`)
+	flag.StringVar(&output, "out", "", `Where to output the generated embedded template file, stdout is default`)
+	flag.StringVar(&packageName, "package", "main", `The package name for generated embedded template file`)
 	flag.Parse()
 
 	if input == "" {
@@ -73,7 +75,7 @@ func main() {
 	w := bufio.NewWriter(&buf)
 
 	// build the generated go output file
-	w.WriteString(fmt.Sprintf("package %s\n\n", `main`))
+	w.WriteString(fmt.Sprintf("package %s\n\n", packageName))
 	w.WriteString("import (\n" + `    "encoding/base64"` + "\n" + `    "text/template"` + "\n)\n\n")
 	w.WriteString("var embeddedTemplates = map[string]string{\n")
 
